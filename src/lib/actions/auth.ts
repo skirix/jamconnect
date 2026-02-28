@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { MusicianProfileData, VenueProfileData, VenueTypeEnum, InstrumentSchema } from "@/lib/types/profile-types";
 
 export async function login(formData: FormData): Promise<void> {
   const supabase = await createClient();
@@ -75,20 +76,8 @@ export interface Instrument {
   level: 'beginner' | 'intermediate' | 'advanced' | 'pro';
 }
 
-export interface ProfileData {
-  display_name: string;
-  bio?: string;
-  city: string;
-  postal_code: string;
-  latitude?: number;
-  longitude?: number;
-  level: 'beginner' | 'intermediate' | 'advanced' | 'pro';
-  instruments: Instrument[];
-  styles: string[];
-  avatar_url?: string;
-}
 
-export async function createMusicianProfile(data: ProfileData): Promise<void> {
+export async function createMusicianProfile(data: MusicianProfileData): Promise<void> {
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -118,7 +107,7 @@ export async function createMusicianProfile(data: ProfileData): Promise<void> {
   redirect("/profile");
 }
 
-export async function updateMusicianProfile(data: Partial<ProfileData>): Promise<void> {
+export async function updateMusicianProfile(data: Partial<MusicianProfileData>): Promise<void> {
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -154,3 +143,170 @@ export async function uploadAvatar(file: File): Promise<string> {
   const { data } = supabase.storage.from('profiles').getPublicUrl(filePath);
   return data.publicUrl;
 }
+
+export async function getUserVenues(): Promise<VenueProfileData[]> {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  const { data, error } = await supabase
+    .from('venue_profiles')
+    .select('*, id')
+    .eq('user_id', user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data as VenueProfileData[];
+}
+
+export async function getVenueProfilePublic(venueId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('venue_profiles')
+    .select('*')
+    .eq('id', venueId)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function getVenueProfileById(venueId: string) {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  const { data, error } = await supabase
+    .from('venue_profiles')
+    .select('*')
+    .eq('id', venueId)
+    .eq('user_id', user.id) // Ensure user can only read their own venue here for editing purposes
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function deleteVenuePhoto(photoUrl: string): Promise<void> {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Non authentifié");
+  }
+
+  // Extract the file path from the full URL
+  const filePath = photoUrl.split("venue_photos/")[1];
+
+  const { error } = await supabase.storage
+    .from('venue_photos')
+    .remove([filePath]);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+// NEW: Venue Profile Actions
+
+export async function createVenueProfile(data: VenueProfileData): Promise<void> {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  const { data: venueData, error } = await supabase
+    .from('venue_profiles')
+    .insert({
+      user_id: user.id,
+      ...data,
+    })
+    .select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  // Update user_types to mark as venue
+  const { error: typeError } = await supabase
+    .from('user_types')
+    .upsert({
+      user_id: user.id,
+      is_venue: true,
+    });
+
+  if (typeError) {
+    throw new Error(typeError.message);
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/profile");
+}
+
+export async function updateVenueProfile(venueId: string, data: Partial<VenueProfileData>): Promise<void> {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Utilisateur non authentifié.");
+  }
+
+  const { error } = await supabase
+    .from('venue_profiles')
+    .update(data)
+    .eq('id', venueId)
+    .eq('user_id', user.id); // Ensure user can only update their own venues
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/", "layout");
+}
+
+export async function uploadVenuePhoto(file: File): Promise<string> {
+  const supabase = await createClient();
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (!user) {
+    throw new Error("Non authentifié");
+  }
+
+  const fileExt = file.name.split('.').pop();
+  // Using user ID and a timestamp to ensure unique file names per user
+  const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+  const filePath = `venue_photos/${fileName}`; // Folder inside the 'venue_photos' bucket
+
+  const { error: uploadError } = await supabase.storage
+    .from('venue_photos') // Use the dedicated venue photos bucket
+    .upload(filePath, file, { upsert: true });
+
+  if (uploadError) {
+    throw new Error(uploadError.message);
+  }
+
+  const { data: publicUrlData } = supabase.storage.from('venue_photos').getPublicUrl(filePath);
+  
+  if (!publicUrlData) {
+    throw new Error("Impossible de récupérer l'URL publique de l'image.");
+  }
+
+  return publicUrlData.publicUrl;
+}
+

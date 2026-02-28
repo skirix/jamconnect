@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { createMusicianProfile, uploadAvatar, ProfileData } from "@/lib/actions/auth";
+import { createMusicianProfile, uploadAvatar } from "@/lib/actions/auth";
+import { MusicianProfileData } from "@/lib/types/profile-types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -107,12 +108,12 @@ export default function CreateProfilePage() {
         avatarUrl = await uploadAvatar(avatarFile);
       }
 
-      const profileData: ProfileData = {
+      const profileData: MusicianProfileData = {
         display_name: formData.get("display_name") as string,
         bio: formData.get("bio") as string || undefined,
         city: formData.get("city") as string,
         postal_code: formData.get("postal_code") as string,
-        level: formData.get("level") as ProfileData['level'],
+        level: formData.get("level") as MusicianProfileData['level'],
         instruments: selectedInstruments,
         styles: selectedStyles,
         avatar_url: avatarUrl,
