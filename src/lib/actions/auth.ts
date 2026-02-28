@@ -23,21 +23,30 @@ export async function login(formData: FormData): Promise<void> {
 }
 
 export async function signup(formData: FormData): Promise<void> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+    const data = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    };
 
-  const { error } = await supabase.auth.signUp(data);
+    console.log("Signup attempt for:", data.email);
+    
+    const { data: authData, error } = await supabase.auth.signUp(data);
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      console.error("Supabase signup error:", error.message);
+      throw new Error(error.message);
+    }
+
+    console.log("Signup success:", authData.user?.id);
+    revalidatePath("/", "layout");
+    redirect("/profile/create");
+  } catch (err) {
+    console.error("Signup catch error:", err);
+    throw err;
   }
-
-  revalidatePath("/", "layout");
-  redirect("/profile/create");
 }
 
 export async function logout() {

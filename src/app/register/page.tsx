@@ -17,9 +17,11 @@ export default function RegisterPage() {
     setError(null);
 
     try {
+      console.log("Tentative d'inscription avec:", formData.get("email"));
       await signup(formData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+      console.error("Erreur inscription:", err);
+      setError(err instanceof Error ? err.message : "Une erreur est survenue. Vérifie ta connexion.");
     } finally {
       setIsLoading(false);
     }
