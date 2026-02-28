@@ -184,4 +184,72 @@ Zones : Paris et Lille uniquement.
 | US-2.1 | En tant que musicien, je veux rechercher d'autres musiciens par instrument | 3 |
 | US-2.2 | En tant que musicien, je veux filtrer par style musical | 2 |
 | US-2.3 | En tant que musicien, je veux filtrer par niveau | 2 |
-| US-
+| US-2.4 | En tant que musicien, je veux rechercher dans un rayon autour de ma ville | 3 |
+| US-2.5 | En tant que musicien, je veux voir les résultats avec photo, instruments et ville | 3 |
+| US-2.6 | En tant que musicien, je veux consulter le profil détaillé d'un autre musicien | 2 |
+| US-2.7 | En tant que musicien, je veux contacter un autre musicien par email | 3 |
+
+### Epic 3: Jam Sessions
+**Objectif** : Permettre l'organisation et la participation aux sessions de jam.
+
+| Story | Description | Points |
+|-------|-------------|--------|
+| US-3.1 | En tant qu'utilisateur, je veux créer une jam session avec titre, date et description | 3 |
+| US-3.2 | En tant qu'utilisateur, je veux définir le lieu de la session (mon adresse ou un lieu référencé) | 3 |
+| US-3.3 | En tant qu'utilisateur, je veux définir le nombre maximum de participants | 2 |
+| US-3.4 | En tant qu'utilisateur, je veux choisir le mode "inscription avec confirmation" | 2 |
+| US-3.5 | En tant qu'utilisateur, je veux choisir le mode "public" sans validation | 2 |
+| US-3.6 | En tant qu'utilisateur, je veux voir la liste des sessions à venir près de chez moi | 3 |
+| US-3.7 | En tant qu'utilisateur, je veux filtrer les sessions par ville et date | 2 |
+| US-3.8 | En tant que participant, je veux demander à rejoindre une session | 2 |
+| US-3.9 | En tant que créateur, je veux voir les demandes de participation | 2 |
+| US-3.10 | En tant que créateur, je veux accepter ou refuser une demande | 2 |
+| US-3.11 | En tant que créateur, je veux voir la liste des participants confirmés | 1 |
+| US-3.12 | En tant que créateur, je veux annuler ma session | 2 |
+
+### Epic 4: Découverte des Lieux
+**Objectif** : Référencer les bars et salles accessibles aux musiciens.
+
+| Story | Description | Points |
+|-------|-------------|--------|
+| US-4.1 | En tant qu'utilisateur, je veux voir la liste des lieux référencés par ville | 2 |
+| US-4.2 | En tant qu'utilisateur, je veux consulter la fiche détaillée d'un lieu | 2 |
+| US-4.3 | En tant qu'utilisateur, je veux voir les sessions à venir dans un lieu | 2 |
+| US-4.4 | En tant que propriétaire, je veux mettre à jour les informations de mon lieu | 2 |
+| US-4.5 | En tant que propriétaire, je veux ajouter/modifier les photos de mon lieu | 3 |
+
+### Epic 5: Marketplace Matériel
+**Objectif** : Permettre l'achat/vente/location de matériel musical entre particuliers.
+
+| Story | Description | Points |
+|-------|-------------|--------|
+| US-5.1 | En tant qu'utilisateur, je veux créer une annonce de vente de matériel | 3 |
+| US-5.2 | En tant qu'utilisateur, je veux créer une annonce de location de matériel | 3 |
+| US-5.3 | En tant qu'utilisateur, je veux choisir la catégorie (instruments, amplis, pédales, accessoires) | 2 |
+| US-5.4 | En tant qu'utilisateur, je veux ajouter des photos à mon annonce | 3 |
+| US-5.5 | En tant qu'utilisateur, je veux définir le prix et la localisation | 2 |
+| US-5.6 | En tant qu'utilisateur, je veux modifier ou supprimer mon annonce | 2 |
+| US-5.7 | En tant qu'utilisateur, je veux marquer mon annonce comme vendue/louée | 1 |
+| US-5.8 | En tant qu'acheteur, je veux rechercher du matériel avec filtres | 3 |
+| US-5.9 | En tant qu'acheteur, je veux voir les détails d'une annonce | 2 |
+| US-5.10 | En tant qu'acheteur, je veux contacter le vendeur par email | 3 |
+
+---
+
+## 6. Critères d'Acceptation Généraux
+
+- Toutes les pages doivent avoir un état de chargement (skeleton ou spinner)
+- Tous les formulaires doivent valider les inputs et afficher les erreurs
+- Les actions destructrices (suppression) doivent avoir une confirmation
+- Les pages publiques doivent être accessibles sans connexion
+- Les pages privées doivent rediriger vers login si non authentifié
+- Les emails doivent partir de manière fiable (pas dans les spams)
+- Les images uploadées doivent être optimisées et redimensionnées
+
+---
+
+**Version** : 1.0  
+**Date** : 2026-02-28  
+**Auteur** : Skirix  
+
+**Statut** : ✅ Prêt pour validation
