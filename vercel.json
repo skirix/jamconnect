@@ -3,5 +3,5 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["cdg"]
+  "regions": ["cdg1"]
 }
