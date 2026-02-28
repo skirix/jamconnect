@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { MusicianProfileData, VenueProfileData, VenueTypeEnum, InstrumentSchema } from "@/lib/types/profile-types";
+import { MusicianProfileData, VenueProfileData } from "@/lib/types/profile-types";
 
 export async function login(formData: FormData): Promise<void> {
   const supabase = await createClient();
@@ -231,13 +231,12 @@ export async function createVenueProfile(data: VenueProfileData): Promise<void> 
     throw new Error("Utilisateur non authentifié.");
   }
 
-  const { data: venueData, error } = await supabase
+  const { error } = await supabase
     .from('venue_profiles')
     .insert({
       user_id: user.id,
       ...data,
-    })
-    .select();
+    });
 
   if (error) {
     throw new Error(error.message);

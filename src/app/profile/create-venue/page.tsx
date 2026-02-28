@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X, Upload, HomeIcon, PlusCircle } from "lucide-react";
+import { X, HomeIcon, PlusCircle } from "lucide-react";
 
 const VENUE_TYPES = [
   { value: "rehearsal_room", label: "Salle de répétition" },
@@ -242,7 +242,7 @@ export default function CreateVenueProfilePage() {
             {/* Photos Upload */}
             <div className="space-y-2">
               <Label htmlFor="photos">Photos du lieu (max 6) *</Label>
-              <p className="text-sm text-muted-foreground">Téléchargez des photos de votre lieu. La première photo sera l'image principale.</p>
+              <p className="text-sm text-muted-foreground">Téléchargez des photos de votre lieu. La première photo sera l&apos;image principale.</p>
               <div className="grid grid-cols-3 gap-4">
                 {photoPreviews.map((src, index) => (
                   <div key={index} className="relative w-full h-24 rounded-md overflow-hidden group">

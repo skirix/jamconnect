@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X, Upload, HomeIcon, PlusCircle, Loader2 } from "lucide-react";
+import { X, HomeIcon, PlusCircle, Loader2 } from "lucide-react";
 
 const VENUE_TYPES = [
   { value: "rehearsal_room", label: "Salle de répétition" },
@@ -63,7 +63,7 @@ export default function EditVenueProfilePage({ params }: EditVenueProfilePagePro
           setPostalCode(data.postal_code);
           setCapacity(data.capacity || undefined);
           setExistingPhotos(data.photos || []);
-          setSelectedEquipments(data.equipments?.map((eq: any) => eq.name) || []);
+          setSelectedEquipments(data.equipments?.map((eq: {name: string}) => eq.name) || []);
         } else {
           setError("Lieu non trouvé ou vous n\'êtes pas autorisé à le modifier.");
         }
@@ -335,7 +335,7 @@ export default function EditVenueProfilePage({ params }: EditVenueProfilePagePro
             {/* Photos Upload */}
             <div className="space-y-2">
               <Label htmlFor="photos">Photos du lieu (max 6) *</Label>
-              <p className="text-sm text-muted-foreground">Téléchargez des photos de votre lieu. La première photo sera l'image principale.</p>
+              <p className="text-sm text-muted-foreground">Téléchargez des photos de votre lieu. La première photo sera l&apos;image principale.</p>
               <div className="grid grid-cols-3 gap-4">
                 {existingPhotos.map((src, index) => (
                   <div key={`existing-${index}`} className="relative w-full h-24 rounded-md overflow-hidden group">
@@ -381,7 +381,7 @@ export default function EditVenueProfilePage({ params }: EditVenueProfilePagePro
 
             <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
               {isSubmitting ? (
-                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />"Mise à jour du lieu..."</>
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />&quot;Mise à jour du lieu...&quot;</>
               ) : (
                 "Mettre à jour le lieu"
               )}
