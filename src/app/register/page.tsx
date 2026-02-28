@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { signup } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +9,22 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link";
 
 export default function RegisterPage() {
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(formData: FormData) {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await signup(formData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md">
@@ -15,8 +34,13 @@ export default function RegisterPage() {
             Rejoignez la communauté JamConnect
           </CardDescription>
         </CardHeader>
-        <form action={signup}>
+        <form action={handleSubmit}>
           <CardContent className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -42,8 +66,8 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full">
-              S&apos;inscrire
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Inscription..." : "S'inscrire"}
             </Button>
             <p className="text-sm text-center text-gray-600">
               Déjà un compte ?{" "}
