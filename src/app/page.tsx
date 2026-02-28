@@ -1,100 +1,159 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Music, Users, MapPin, Guitar, Mic2, Drum } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Music className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">JamConnect</span>
+          </div>
+          <nav className="flex items-center gap-4">
+            <Link href="/login">
+              <Button variant="ghost">Se connecter</Button>
+            </Link>
+            <Link href="/register">
+              <Button>S&apos;inscrire</Button>
+            </Link>
+          </nav>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
+          Trouve tes <span className="text-primary">partenaires musicaux</span>
+          <br />
+          près de chez toi
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
+          Rejoins la communauté de musiciens française. Organise des jam sessions,
+          découvre des talents, et partage ta passion.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href="/register">
+            <Button size="lg" className="text-lg px-8">
+              Rejoindre la communauté
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button size="lg" variant="outline" className="text-lg px-8">
+              J&apos;ai déjà un compte
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border text-center">
+            <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Trouve des musiciens</h3>
+            <p className="text-muted-foreground">
+              Filtre par instrument, style musical et niveau pour trouver les musiciens
+              qui correspondent à tes critères.
+            </p>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl shadow-sm border text-center">
+            <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MapPin className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Organise des sessions</h3>
+            <p className="text-muted-foreground">
+              Crée ou rejoins des jam sessions dans ta ville. Gère les participants
+              et trouve des lieux pour jouer.
+            </p>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl shadow-sm border text-center">
+            <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Guitar className="h-7 w-7 text-primary" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Marketplace matériel</h3>
+            <p className="text-muted-foreground">
+              Achète, vends ou loue du matériel musical entre particuliers.
+              Guitares, batteries, amplis et plus encore.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Instruments */}
+      <section className="bg-slate-900 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-12">Pour tous les musiciens</h2>
+          <div className="flex flex-wrap justify-center gap-8">
+            <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full">
+              <Guitar className="h-5 w-5" />
+              <span>Guitaristes</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full">
+              <Drum className="h-5 w-5" />
+              <span>Batteurs</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full">
+              <Mic2 className="h-5 w-5" />
+              <span>Chanteurs</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full">
+              <Music className="h-5 w-5" />
+              <span>Claviéristes</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full">
+              <Guitar className="h-5 w-5" />
+              <span> Bassistes</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <div className="bg-primary rounded-3xl p-12 text-primary-foreground">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Prêt à faire de la musique ?
+          </h2>
+          <p className="text-lg opacity-90 max-w-xl mx-auto mb-8">
+            Rejoins des milliers de musiciens en France. Crée ton profil en
+            quelques clics et commence à jammer.
+          </p>
+          <Link href="/register">
+            <Button size="lg" variant="secondary" className="text-lg px-8">
+              Créer mon compte gratuitement
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t bg-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Music className="h-5 w-5 text-primary" />
+              <span className="font-semibold">JamConnect</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2026 JamConnect. La plateforme des musiciens français.
+            </p>
+            <div className="flex gap-6">
+              <Link href="/login" className="text-sm text-muted-foreground hover:text-foreground">
+                Connexion
+              </Link>
+              <Link href="/register" className="text-sm text-muted-foreground hover:text-foreground">
+                Inscription
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
