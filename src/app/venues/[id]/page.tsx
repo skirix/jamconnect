@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getVenueProfilePublic } from "@/lib/actions/auth";
 import { VenueProfileData } from "@/lib/types/profile-types";
+import VenueMap from "@/components/venue-map";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { HomeIcon, MapPin, Users, Guitar, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
@@ -171,6 +172,18 @@ export default function VenuePage({ params }: VenuePageProps) {
               </div>
             )}
           </div>
+
+          {/* Map */}
+          {venue.latitude && venue.longitude && (
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold mb-2">Localisation</h3>
+              <VenueMap
+                latitude={venue.latitude}
+                longitude={venue.longitude}
+                venueName={venue.venue_name}
+              />
+            </div>
+          )}
 
         </CardContent>
       </Card>

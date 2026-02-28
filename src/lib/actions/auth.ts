@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MusicianProfileData, VenueProfileData } from "@/lib/types/profile-types";
+import { geocodeAddress } from "@/lib/geocoding";
 
 export async function login(formData: FormData): Promise<void> {
   const supabase = await createClient();
@@ -231,11 +232,20 @@ export async function createVenueProfile(data: VenueProfileData): Promise<void> 
     throw new Error("Utilisateur non authentifié.");
   }
 
+  // Geocode address to get lat/long
+  const geocodingResult = await geocodeAddress(data.address, data.city, data.postal_code);
+  
+  const venueData = {
+    ...data,
+    latitude: geocodingResult?.latitude,
+    longitude: geocodingResult?.longitude,
+  };
+
   const { error } = await supabase
     .from('venue_profiles')
     .insert({
       user_id: user.id,
-      ...data,
+      ...venueData,
     });
 
   if (error) {
@@ -266,9 +276,32 @@ export async function updateVenueProfile(venueId: string, data: Partial<VenuePro
     throw new Error("Utilisateur non authentifié.");
   }
 
+  // If address fields changed, re-geocode
+  let venueData = { ...data };
+  if (data.address || data.city || data.postal_code) {
+    // Get current venue data to fill in missing fields
+    const { data: currentVenue } = await supabase
+      .from('venue_profiles')
+      .select('address, city, postal_code')
+      .eq('id', venueId)
+      .single();
+    
+    const address = data.address || currentVenue?.address || '';
+    const city = data.city || currentVenue?.city || '';
+    const postalCode = data.postal_code || currentVenue?.postal_code || '';
+    
+    const geocodingResult = await geocodeAddress(address, city, postalCode);
+    
+    venueData = {
+      ...venueData,
+      latitude: geocodingResult?.latitude,
+      longitude: geocodingResult?.longitude,
+    };
+  }
+
   const { error } = await supabase
     .from('venue_profiles')
-    .update(data)
+    .update(venueData)
     .eq('id', venueId)
     .eq('user_id', user.id); // Ensure user can only update their own venues
 
